@@ -1,5 +1,6 @@
 import express from 'express'
 import sql from './src/config/db_pg'
+import tacheRoutes from './src/routes/tache.route.js';
 
 // Créer une application express
 const app = express();
