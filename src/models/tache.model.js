@@ -1,21 +1,25 @@
 import sql from '../config/db_pg.js';
 
-function afficherToutesTaches(){
+function afficherToutesTaches(utilisateurId, afficherToutes = false) {
     return new Promise((resolve, reject) => {
-        const requete = 'SELECT id, utilisateur_id, titre, description, date_debut, date_echeance, complete FROM taches';
-        const parametres = [id];
+        let requete = 'SELECT id, utilisateur_id, titre, description, date_debut, date_echeance, complete FROM taches WHERE utilisateur_id = ?';
+        const parametres = [utilisateurId];
+
+        if (!afficherToutes) {
+            requete += ' AND complete = 0';
+        }
 
         sql.query(requete, parametres, (erreur, resultat) => {
             if (erreur) {
-                console.log('Erreur sqlState : ' + erreur);
-                console.log(`Erreur sqlState ${erreur.sqlState} : ${erreur.sqlMessage}`);
-                reject(erreur);
+                console.log('Erreur sqlState : ' + erreur.sqlState + ' : ' + erreur.sqlMessage);
+                return reject(erreur);
             }
 
-            resolve(resultat.rows);
+            resolve(resultat);
         });
     });
-};
+}
+
 
 function afficherDetails(){
 
