@@ -3,11 +3,18 @@ import authentification from '../middlewares/authentification.middleware.js';
 import bcrypt from 'bcrypt';
 
 
-export const ValidationCle = async (cleApi) => {
-    // Vérifie si une tâche appartient a cette clé existe
-    const tache = await sql.findOne({ where: { cleApi } });
-    return tache !== null;  // Retourne true si la clé existe, sinon false
+const ValidationCle = async (cleApi) => {
+    try {
+        const requete = `SELECT id FROM utilisateurs WHERE cle_api = $1`;
+        const resultat = await sql.query(requete, [cleApi]);
+
+        return resultat.rows.length > 0;  // True si utilisateur trouvé
+    } catch (error) {
+        console.error("Erreur dans ValidationCle :", error);
+        return false;
+    }
 };
+
 
 // Code fait par ChatGPT pour generer une clé d'api
 function genererCleAPI() {
@@ -28,9 +35,7 @@ function afficherToutesTaches(cleApi, afficherToutes = false) {
                 const utilisateurId = resultatUtilisateur.rows[0].id;
 
                 let requeteTaches = `
-                    SELECT id, utilisateur_id, titre, description, date_debut, date_echeance, complete
-                    FROM taches
-                    WHERE utilisateur_id = $1`;
+                    SELECT id, utilisateur_id, titre, description, date_debut, date_echeance, complete FROM taches WHERE utilisateur_id = $1`;
 
                 if (!afficherToutes) {
                     requeteTaches += ' AND complete = false';
@@ -99,4 +104,4 @@ async function mettreAJourCleApi(utilisateurId, nouvelleCle) {
     await sql.query(requete, [nouvelleCle, utilisateurId]);
 }
 
-export{afficherToutesTaches, afficherDetails, crudTaches, crudSousTaches, ajouterUtilisateurs, obtenirCleApi, mettreAJourCleApi};
+export{ValidationCle, afficherToutesTaches, afficherDetails, crudTaches, crudSousTaches, ajouterUtilisateurs, obtenirCleApi, mettreAJourCleApi};
