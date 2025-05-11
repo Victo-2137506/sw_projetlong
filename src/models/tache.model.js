@@ -19,10 +19,10 @@ function genererCleAPI() {
 function afficherToutesTaches(cleApi, afficherToutes = false) {
     return new Promise((resolve, reject) => {
         let requete = 'SELECT id, utilisateur_id, titre, description, date_debut, date_echeance, complete FROM taches WHERE cle_api = ?';
-        const parametres = [cleApi];
+        const parametres = [cleApi]; // On utilise cleApi ici.
 
         if (!afficherToutes) {
-            requete += ' AND complete = 0';
+            requete += ' AND complete = 0'; // Filtre pour ne pas afficher les tâches complètes si nécessaire.
         }
 
         sql.query(requete, parametres, (erreur, resultat) => {
@@ -33,8 +33,9 @@ function afficherToutesTaches(cleApi, afficherToutes = false) {
 
             resolve(resultat);
         });
-    });
+    });S
 }
+
 
 
 function afficherDetails(){
