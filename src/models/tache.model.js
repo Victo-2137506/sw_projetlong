@@ -2,8 +2,6 @@ import sql from '../config/db_pg.js';
 import authentification from '../middlewares/authentification.middleware.js';
 import bcrypt from 'bcrypt';
 
-console.log("Clé API reçue dans middleware :", req.headers.authorization);
-
 const ValidationCle = async (cleApi) => {
     try {
         const requete = `SELECT id FROM utilisateurs WHERE cle_api = $1`;
@@ -24,7 +22,6 @@ function genererCleAPI() {
 
 function afficherToutesTaches(cleApi, afficherToutes = false) {
     return new Promise((resolve, reject) => {
-        console.log("Clé API reçue dans afficherToutesTaches :", cleApi);
 
         // Requête pour trouver l'utilisateur à partir de la clé API
         const requeteUtilisateur = 'SELECT id FROM utilisateurs WHERE cle_api = $1';
