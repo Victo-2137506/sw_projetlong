@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 
 const ValidationCle = async (cleApi) => {
     try {
-        const requete = `SELECT id FROM utilisateurs WHERE cle_api = 1$`;
+        const requete = `SELECT id FROM utilisateurs WHERE cle_api = $1`;
         const resultat = await sql.query(requete, [cleApi]);
 
         return resultat.rows.length > 0;  // True si utilisateur trouvé
@@ -22,7 +22,7 @@ function genererCleAPI() {
 
 function afficherToutesTaches(utilisateurId, toutes = false) {
     return new Promise((resolve, reject) => {
-        let pg = "SELECT * FROM taches WHERE utilisateur_id = 1$";
+        let pg = "SELECT * FROM taches WHERE utilisateur_id = $1";
 
         if(!toutes){
             pg += " AND complete = 0";
