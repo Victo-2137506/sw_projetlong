@@ -1,3 +1,5 @@
+import bcrypt from "bcrypt";
+import crypto from "crypto";
 import {afficherToutesTaches, afficherDetails, crudTaches, crudSousTaches, ajouterUtilisateurs, obtenirCleApi, mettreAJourCleApi} from "../models/tache.model.js";
 
 const AfficherTachesUsager = (req, res) => {
