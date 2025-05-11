@@ -1,4 +1,4 @@
-import {afficherToutesTaches, afficherDetails, crudTaches, crudSousTaches, ajouterUtilisateurs, recupererCleApi} from "../models/tache.model.js";
+import {afficherToutesTaches, afficherDetails, crudTaches, crudSousTaches, ajouterUtilisateurs, obtenirCleApi, mettreAJourCleApi} from "../models/tache.model.js";
 
 const AfficherTachesUsager = (req, res) => {
     const cleApi = req.headers['authorization']; // Ou bien récupère la clé API d'une autre manière, selon comment tu la passes (par exemple dans les paramètres URL, req.query, etc.).
@@ -55,20 +55,42 @@ const AjouterUtilisateur = (req, res) => {
         });
 };
 
-async function recupererCleApiUtilisateur(req, res) {
-    const { courriel, motDePasse, regenerer } = req.body;
-
-    if (!courriel || !motDePasse) {
-        return res.status(400).json({ erreur: "Courriel et mot de passe requis" });
+const demandercle = async (req, res) => {
+    const { courriel, motdepasse, regenerer } = req.body;
+ 
+    if (!courriel || !motdepasse) {
+        return res.status(400).json({ message: "Courriel et mot de passe requis" });
     }
-
+ 
     try {
-        const cle = await recupererCleApi(courriel, motDePasse, regenerer === true || regenerer === "true");
-        res.json({ cle_api: cle });
-    } catch (err) {
-        res.status(401).json({ erreur: err.message });
+        // 1. Récupérer l'utilisateur et le mot de passe haché
+        const utilisateur = await utilisateurModel.obtenirCleApi(courriel);
+ 
+        if (!utilisateur) {
+            return res.status(404).json({ message: "Utilisateur non trouvé" });
+        }
+ 
+        // 2. Vérifier le mot de passe
+        const motDePasseValide = await bcrypt.compare(motdepasse, utilisateur.password);
+        if (!motDePasseValide) {
+            return res.status(401).json({ message: "Mot de passe invalide" });
+        }
+ 
+        // 3. Générer une nouvelle clé API si demandé
+        if (regenerer === true) {
+            const nouvelleCle = crypto.randomBytes(15).toString("hex");
+            await utilisateurModel.mettreAJourCleApi(utilisateur.id, nouvelleCle);
+            return res.status(200).json({ message: "Nouvelle clé générée", cle_api: nouvelleCle });
+        }
+ 
+        // 4. Retourner la clé existante
+        return res.status(200).json({ cle_api: utilisateur.cle_api });
+ 
+    } catch (erreur) {
+        console.error("Erreur dans demanderCle :", erreur);
+        return res.status(500).json({ message: "Erreur interne lors de la demande de clé" });
     }
-}
+};
 
 
-export{AfficherTachesUsager, AjouterUtilisateur, recupererCleApiUtilisateur}
+export{AfficherTachesUsager, AjouterUtilisateur, demandercle}

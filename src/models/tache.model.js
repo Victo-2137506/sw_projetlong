@@ -84,40 +84,25 @@ function ajouterUtilisateurs(nom, prenom, courriel, password) {
     });
 }
 
+async function obtenirCleApi(courriel) {
+    const requete = `SELECT id, password, cle_api FROM utilisateurs WHERE courriel = $1`;
+    const result = await sql.query(requete, [courriel]);
 
-function recupererCleApi(courriel, motDePasse, regenerer = false) {
-    return new Promise((resolve, reject) => {
-        // Vérifier si l'utilisateur existe
-        const requete = `SELECT id, password, cle_api FROM utilisateurs WHERE courriel = $1`;
-        sql.query(requete, [courriel])
-            .then(result => {
-                if (result.rows.length === 0) {
-                    return reject(new Error("Utilisateur non trouvé"));
-                }
+    if (result.rows.length === 0) {
+        return null;
+    }
 
-                const utilisateur = result.rows[0];
-
-                // Comparer le mot de passe
-                bcrypt.compare(motDePasse, utilisateur.password)
-                    .then(estValide => {
-                        if (!estValide) {
-                            return reject(new Error("Mot de passe invalide"));
-                        }
-
-                        // Si on veut régénérer la clé
-                        if (regenerer) {
-                            const nouvelleCle = genererCleAPI();
-                            const updateQuery = `UPDATE utilisateurs SET cle_api = $1 WHERE id = $2`;
-
-                            return sql.query(updateQuery, [nouvelleCle, utilisateur.id])
-                                .then(() => resolve(nouvelleCle));
-                        } else {
-                            return resolve(utilisateur.cle_api);
-                        }
-                    });
-            })
-            .catch(err => reject(err));
-    });
+    return result.rows[0];
 }
 
-export{afficherToutesTaches, afficherDetails, crudTaches, crudSousTaches, ajouterUtilisateurs, recupererCleApi};
+async function mettreAJourCleApi(utilisateurId, nouvelleCle) {
+    const requete = `UPDATE utilisateurs SET cle_api = $1 WHERE id = $2`;
+    await sql.query(requete, [nouvelleCle, utilisateurId]);
+}
+
+export {
+    ObtenirCleApi,
+    MettreAJourCleApi
+};
+
+export{afficherToutesTaches, afficherDetails, crudTaches, crudSousTaches, ajouterUtilisateurs, obtenirCleApi, mettreAJourCleApi};
