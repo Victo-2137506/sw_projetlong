@@ -1,5 +1,7 @@
 import sql from '../config/db_pg.js';
 import authentification from '../middlewares/authentification.middleware.js';
+import bcrypt from 'bcrypt';
+
 
 export const ValidationCle = async (cleApi) => {
     // Vérifie si une tâche appartient a cette clé existe
@@ -49,23 +51,29 @@ function crudSousTaches(){
 function ajouterUtilisateurs(nom, prenom, courriel, password) {
     return new Promise((resolve, reject) => {
         const cle_api = genererCleAPI();
-        const requete = `INSERT INTO utilisateurs (nom, prenom, courriel, password, cle_api) VALUES ($1, $2, $3, $4, $5) RETURNING id`;
-        const params = [nom, prenom, courriel, password, cle_api];
 
-        sql.query(requete, params)
+        // Hasher le mot de passe avant insertion
+        bcrypt.hash(password, 10) // 10 est le "salt rounds", un bon compromis sécurité/performance
+            .then(hashedPassword => {
+                const requete = `INSERT INTO utilisateurs (nom, prenom, courriel, password, cle_api) VALUES ($1, $2, $3, $4, $5) RETURNING id`;
+                const params = [nom, prenom, courriel, hashedPassword, cle_api];
+
+                return sql.query(requete, params);
+            })
             .then(resultat => {
                 resolve({
                     id: resultat.rows[0].id,
                     nom,
                     prenom,
                     courriel,
-                    password,
+                    password: '****', // Ne jamais renvoyer le mot de passe (même hashé)
                     cle_api
                 });
             })
             .catch(err => reject(err));
     });
 }
+
 
 function recupererCleApi(){
 
