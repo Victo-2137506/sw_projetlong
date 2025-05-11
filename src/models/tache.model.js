@@ -22,21 +22,20 @@ function genererCleAPI() {
 
 function afficherToutesTaches(utilisateurId, afficherToutes = false) {
     return new Promise((resolve, reject) => {
-        let pg = "SELECT * FROM taches WHERE utilisateur_id = $1"; // Utiliser $1 pour l'ID utilisateur
+        let pg = "SELECT * FROM taches WHERE utilisateur_id = 1$";
 
-        if (!afficherToutes) { // Vérifie `afficherToutes` ici
-            pg += " AND complete = 0"; // Ajouter condition si on ne veut pas toutes les tâches
+        if(!toutes){
+            pg += " AND complete = 0";
         }
 
         sql.query(pg, [utilisateurId], (err, results) => {
-            if (err) {
-                return reject(err);
+            if(err){
+                return reject(err)
             }
-            resolve(results.rows); // Assurez-vous de renvoyer `results.rows` car ce sont les données
-        });
+            resolve(results);
+        })
     });
 }
-
 
 function afficherDetails(){
 
