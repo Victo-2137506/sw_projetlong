@@ -11,8 +11,10 @@ export const ValidationCle = async (cleApi) => {
 
 // Code fait par ChatGPT pour generer une clé d'api
 function genererCleAPI() {
-    return crypto.randomUUID(); // Ex : '110ec58a-a0f2-4ac4-8393-c866d813b8d1'
-  }
+    const cle = crypto.randomUUID(); // Ex : '110ec58a-a0f2-4ac4-8393-c866d813b8d1'
+    return cle.replace(/-/g, '').slice(0, 30); // Retire les tirets et limite à 30 caractères
+}
+
 
 
 function afficherToutesTaches(cleApi, afficherToutes = false) {
@@ -66,7 +68,7 @@ function ajouterUtilisateurs(nom, prenom, courriel, password) {
                     nom,
                     prenom,
                     courriel,
-                    password: '****', // Ne jamais renvoyer le mot de passe (même hashé)
+                    password: '****',
                     cle_api
                 });
             })
