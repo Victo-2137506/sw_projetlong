@@ -11,8 +11,7 @@ export const ValidationCle = async (cleApi) => {
 
 // Code fait par ChatGPT pour generer une clé d'api
 function genererCleAPI() {
-    const cle = crypto.randomUUID(); // Ex : '110ec58a-a0f2-4ac4-8393-c866d813b8d1'
-    return cle.replace(/-/g, '').slice(0, 30); // Retire les tirets et limite à 30 caractères
+    const cle = crypto.randomBytes(15).toString("hex");
 }
 
 
