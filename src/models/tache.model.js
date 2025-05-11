@@ -18,23 +18,31 @@ function genererCleAPI() {
 
 function afficherToutesTaches(cleApi, afficherToutes = false) {
     return new Promise((resolve, reject) => {
-        let requete = 'SELECT id, utilisateur_id, titre, description, date_debut, date_echeance, complete FROM taches WHERE cle_api = ?';
-        const parametres = [cleApi]; // On utilise cleApi ici.
+        // Trouver d'abord l'utilisateur via sa clé API
+        const requeteUtilisateur = 'SELECT id FROM utilisateurs WHERE cle_api = ?';
 
-        if (!afficherToutes) {
-            requete += ' AND complete = 0'; // Filtre pour ne pas afficher les tâches complètes si nécessaire.
-        }
-
-        sql.query(requete, parametres, (erreur, resultat) => {
-            if (erreur) {
-                console.log('Erreur sqlState : ' + erreur.sqlState + ' : ' + erreur.sqlMessage);
-                return reject(erreur);
+        sql.query(requeteUtilisateur, [cleApi], (err, resultatUtilisateur) => {
+            if (err || resultatUtilisateur.length === 0) {
+                return reject(new Error("Erreur lors de la validation de la clé api"));
             }
 
-            resolve(resultat);
+            const utilisateurId = resultatUtilisateur[0].id;
+
+            let requeteTaches = `
+                SELECT id, utilisateur_id, titre, description, date_debut, date_echeance, complete FROM taches WHERE utilisateur_id = ?`;
+
+            if (!afficherToutes) {
+                requeteTaches += ' AND complete = 0';
+            }
+
+            sql.query(requeteTaches, [utilisateurId], (erreur, resultat) => {
+                if (erreur) return reject(erreur);
+                resolve(resultat);
+            });
         });
-    });S
+    });
 }
+
 
 
 
