@@ -7,8 +7,10 @@ import authentification from './src/middlewares/authentification.middleware.js';
 // Créer une application express
 const app = express();
 
-app.use('/api/taches', authentification, tacheRoutes)
-app.use(authentification)
+// Importer les middlewares
+app.use(express.json()); // Correction ici : retirer les guillemets autour de express.json()
+
+app.use('/api/taches', tacheRoutes);
 
 // Démarrer le serveur
 const PORT = process.env.PORT || 3000;

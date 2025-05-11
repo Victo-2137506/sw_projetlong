@@ -1,9 +1,22 @@
 import sql from '../config/db_pg.js';
+import authentification from '../middlewares/authentification.middleware.js';
 
-function afficherToutesTaches(utilisateurId, afficherToutes = false) {
+export const ValidationCle = async (cleApi) => {
+    // Vérifie si une tâche appartient a cette clé existe
+    const tache = await sql.findOne({ where: { cleApi } });
+    return tache !== null;  // Retourne true si la clé existe, sinon false
+};
+
+// Code fait par ChatGPT pour generer une clé d'api
+function genererCleAPI() {
+    return crypto.randomUUID(); // Ex : '110ec58a-a0f2-4ac4-8393-c866d813b8d1'
+  }
+
+
+function afficherToutesTaches(cleApi, afficherToutes = false) {
     return new Promise((resolve, reject) => {
-        let requete = 'SELECT id, utilisateur_id, titre, description, date_debut, date_echeance, complete FROM taches WHERE utilisateur_id = ?';
-        const parametres = [utilisateurId];
+        let requete = 'SELECT id, utilisateur_id, titre, description, date_debut, date_echeance, complete FROM taches WHERE cle_api = ?';
+        const parametres = [cleApi];
 
         if (!afficherToutes) {
             requete += ' AND complete = 0';
@@ -33,9 +46,26 @@ function crudSousTaches(){
 
 };
 
-function ajouterUtilisateurs(){
+function ajouterUtilisateurs(nom, prenom, courriel, password) {
+    return new Promise((resolve, reject) => {
+        const cle_api = genererCleAPI();
+        const requete = `INSERT INTO utilisateurs (nom, prenom, courriel, password, cle_api) VALUES ($1, $2, $3, $4, $5) RETURNING id`;
+        const params = [nom, prenom, courriel, password, cle_api];
 
-};
+        sql.query(requete, params)
+            .then(resultat => {
+                resolve({
+                    id: resultat.rows[0].id,
+                    nom,
+                    prenom,
+                    courriel,
+                    password,
+                    cle_api
+                });
+            })
+            .catch(err => reject(err));
+    });
+}
 
 function recupererCleApi(){
 
