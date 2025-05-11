@@ -71,7 +71,7 @@ const Demandercle = async (req, res) => {
         }
  
         // 2. Vérifier le mot de passe
-        const motDePasseValide = await bcrypt.compare(password, utilisateur.password);
+        const motDePasseValide = await bcrypt.compare(motdepasse, utilisateur.password);
         if (!motDePasseValide) {
             return res.status(401).json({ message: "Mot de passe invalide" });
         }
