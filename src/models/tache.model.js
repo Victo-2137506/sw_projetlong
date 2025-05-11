@@ -20,7 +20,7 @@ function genererCleAPI() {
     const cle = crypto.randomBytes(15).toString("hex");
 }
 
-function afficherToutesTaches(utilisateurId, afficherToutes = false) {
+function afficherToutesTaches(utilisateurId, toutes = false) {
     return new Promise((resolve, reject) => {
         let pg = "SELECT * FROM taches WHERE utilisateur_id = 1$";
 
