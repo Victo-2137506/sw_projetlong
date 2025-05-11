@@ -4,11 +4,7 @@ import {afficherToutesTaches, afficherDetails, crudTaches, crudSousTaches, ajout
 
 const AfficherTachesUsager = (req, res) => {
     const utilisateurId = req.utilisateurId;
-    const afficherToutes = req.query.toutes === true;
-
-    if (!utilisateurId) {
-        return res.status(400).json({ message: "La clé API est requise" });
-    }
+    const afficherToutes = req.query.toutes === "true";
 
     afficherToutesTaches(utilisateurId, afficherToutes)
         .then((taches) => {
