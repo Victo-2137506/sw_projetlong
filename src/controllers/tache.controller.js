@@ -55,7 +55,7 @@ const AjouterUtilisateur = (req, res) => {
         });
 };
 
-const demandercle = async (req, res) => {
+const Demandercle = async (req, res) => {
     const { courriel, motdepasse, regenerer } = req.body;
  
     if (!courriel || !motdepasse) {
@@ -93,4 +93,4 @@ const demandercle = async (req, res) => {
 };
 
 
-export{AfficherTachesUsager, AjouterUtilisateur, demandercle}
+export{AfficherTachesUsager, AjouterUtilisateur, Demandercle}
