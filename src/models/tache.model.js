@@ -2,17 +2,24 @@ import sql from '../config/db_pg.js';
 import authentification from '../middlewares/authentification.middleware.js';
 import bcrypt from 'bcrypt';
 
-const ValidationCle = async (cleApi) => {
-    try {
-        const requete = `SELECT id FROM utilisateurs WHERE cle_api = $1`;
-        const resultat = await sql.query(requete, [cleApi]);
-
-        return resultat.rows.length > 0;  // True si utilisateur trouvé
-    } catch (error) {
-        console.error("Erreur dans ValidationCle :", error);
-        return false;
-    }
+function ValidationCle(cleApi) {
+    return new Promise((resolve, reject) => {
+        const sql = "SELECT id FROM utilisateurs WHERE cle_api = $1";
+        db.query(sql, [cleApi], (err, results) => {
+            if (err) {
+                console.error("Erreur lors de la validation de la clé API :", err);
+                return reject(err);
+            }
+ 
+            if (results.length === 0) {
+                return resolve(null); // Clé invalide
+            }
+ 
+            return resolve(results[0].id); // Clé valide : retourne l'ID
+        });
+    });
 };
+ 
 
 
 // Code fait par ChatGPT pour generer une clé d'api
