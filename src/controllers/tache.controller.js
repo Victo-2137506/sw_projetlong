@@ -4,7 +4,7 @@ import {afficherToutesTaches, afficherDetails, crudTaches, crudSousTaches, ajout
 
 const AfficherTachesUsager = (req, res) => {
     const utilisateurId = req.utilisateurId;
-    const afficherToutes = req.query.toutes === 'true';
+    const afficherToutes = req.query.toutes === 'true'; // vérifier le paramètre query
 
     if (!utilisateurId) {
         return res.status(400).json({ message: "La clé API est requise" });
@@ -12,16 +12,15 @@ const AfficherTachesUsager = (req, res) => {
 
     afficherToutesTaches(utilisateurId, afficherToutes)
         .then((taches) => {
-            if (!taches || taches.length === 0) {
+            if (!taches || taches.length === 0) { // Vérifier si les tâches sont vides
                 return res.status(404).json({ message: "Aucune tâche trouvée pour cette clé API" });
             }
-            res.json(taches);
+            res.json(taches); // Retourner les tâches au format JSON
         })
         .catch((error) => {
             res.status(500).json({ message: "Erreur serveur", erreur: error.message });
         });
 };
-
 
 const AjouterUtilisateur = (req, res) => {
     const { nom, prenom, courriel, password } = req.body;
