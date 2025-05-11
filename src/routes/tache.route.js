@@ -9,6 +9,8 @@ router.get('/tache', authentification, AfficherTachesUsager);
 
 router.post('/utilisateur', AjouterUtilisateur)
 
+router.post('/cle-api', getCleApi);
+
 
 
 export default router;

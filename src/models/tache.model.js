@@ -85,8 +85,39 @@ function ajouterUtilisateurs(nom, prenom, courriel, password) {
 }
 
 
-function recupererCleApi(){
+function recupererCleApi(courriel, motDePasse, regenerer = false) {
+    return new Promise((resolve, reject) => {
+        // Vérifier si l'utilisateur existe
+        const requete = `SELECT id, password, cle_api FROM utilisateurs WHERE courriel = $1`;
+        sql.query(requete, [courriel])
+            .then(result => {
+                if (result.rows.length === 0) {
+                    return reject(new Error("Utilisateur non trouvé"));
+                }
 
-};
+                const utilisateur = result.rows[0];
+
+                // Comparer le mot de passe
+                bcrypt.compare(motDePasse, utilisateur.password)
+                    .then(estValide => {
+                        if (!estValide) {
+                            return reject(new Error("Mot de passe invalide"));
+                        }
+
+                        // Si on veut régénérer la clé
+                        if (regenerer) {
+                            const nouvelleCle = genererCleAPI();
+                            const updateQuery = `UPDATE utilisateurs SET cle_api = $1 WHERE id = $2`;
+
+                            return sql.query(updateQuery, [nouvelleCle, utilisateur.id])
+                                .then(() => resolve(nouvelleCle));
+                        } else {
+                            return resolve(utilisateur.cle_api);
+                        }
+                    });
+            })
+            .catch(err => reject(err));
+    });
+}
 
 export{afficherToutesTaches, afficherDetails, crudTaches, crudSousTaches, ajouterUtilisateurs, recupererCleApi};

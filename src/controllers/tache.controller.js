@@ -55,5 +55,20 @@ const AjouterUtilisateur = (req, res) => {
         });
 };
 
+async function recupererCleApiUtilisateur(req, res) {
+    const { courriel, motDePasse, regenerer } = req.body;
 
-export{AfficherTachesUsager, AjouterUtilisateur}
+    if (!courriel || !motDePasse) {
+        return res.status(400).json({ erreur: "Courriel et mot de passe requis" });
+    }
+
+    try {
+        const cle = await recupererCleApi(courriel, motDePasse, regenerer === true || regenerer === "true");
+        res.json({ cle_api: cle });
+    } catch (err) {
+        res.status(401).json({ erreur: err.message });
+    }
+}
+
+
+export{AfficherTachesUsager, AjouterUtilisateur, recupererCleApiUtilisateur}
