@@ -3,14 +3,14 @@ import crypto from "crypto";
 import {afficherToutesTaches, afficherDetails, crudTaches, crudSousTaches, ajouterUtilisateurs, obtenirCleApi, mettreAJourCleApi} from "../models/tache.model.js";
 
 const AfficherTachesUsager = (req, res) => {
-    const cleApi = req.headers['authorization'];
+    const utilisateurId = req.utilisateurId;
     const afficherToutes = req.query.toutes === 'true';
 
     if (!cleApi) {
         return res.status(400).json({ message: "La clé API est requise" });
     }
 
-    afficherToutesTaches(cleApi, afficherToutes)
+    afficherToutesTaches(utilisateurId, afficherToutes)
         .then((taches) => {
             if (!taches || taches.length === 0) {
                 return res.status(404).json({ message: "Aucune tâche trouvée pour cette clé API" });

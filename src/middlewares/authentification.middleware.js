@@ -16,6 +16,7 @@ const authentification = (req, res, next) => {
             return res.status(401).json({ message: "Clé API invalide" });
         } else {
             // La clé API est valide, on continue le traitement avec la fonction next()
+            req.utilisateurId = resultat;
             next();
         }
     })

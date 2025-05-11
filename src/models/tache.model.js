@@ -20,33 +20,20 @@ function genererCleAPI() {
     const cle = crypto.randomBytes(15).toString("hex");
 }
 
-function afficherToutesTaches(cleApi, afficherToutes = false) {
+function afficherToutesTaches(utilisateurId, afficherToutes = false) {
     return new Promise((resolve, reject) => {
+        let pg = "SELECT * FROM taches WHERE utilisateur_id = 1$";
 
-        // Requête pour trouver l'utilisateur à partir de la clé API
-        const requeteUtilisateur = 'SELECT id FROM utilisateurs WHERE cle_api = $1';
+        if(!toutes){
+            pg += " AND complete = 0";
+        }
 
-        sql.query(requeteUtilisateur, [cleApi])
-            .then(resultatUtilisateur => {
-                if (resultatUtilisateur.rows.length === 0) {
-                    return reject(new Error("Clé API invalide ou utilisateur non trouvé"));
-                }
-
-                const utilisateurId = resultatUtilisateur.rows[0].id;
-
-                let requeteTaches = `
-                    SELECT id, utilisateur_id, titre, description, date_debut, date_echeance, complete FROM taches WHERE utilisateur_id = $1`;
-
-                if (!afficherToutes) {
-                    requeteTaches += ' AND complete = false';
-                }
-
-                return sql.query(requeteTaches, [utilisateurId]);
-            })
-            .then(resultatTaches => {
-                resolve(resultatTaches.rows);
-            })
-            .catch(err => reject(err));
+        sql.query(pg, [utilisateurId], (err, results) => {
+            if(err){
+                return reject(err)
+            }
+            resolve(results);
+        })
     });
 }
 
