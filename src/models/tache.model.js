@@ -14,37 +14,36 @@ function genererCleAPI() {
     const cle = crypto.randomBytes(15).toString("hex");
 }
 
-
-
 function afficherToutesTaches(cleApi, afficherToutes = false) {
     return new Promise((resolve, reject) => {
-        // Trouver d'abord l'utilisateur via sa clé API
-        const requeteUtilisateur = 'SELECT id FROM utilisateurs WHERE cle_api = ?';
+        // Requête pour trouver l'utilisateur à partir de la clé API
+        const requeteUtilisateur = 'SELECT id FROM utilisateurs WHERE cle_api = $1';
 
-        sql.query(requeteUtilisateur, [cleApi], (err, resultatUtilisateur) => {
-            if (err || resultatUtilisateur.length === 0) {
-                return reject(new Error("Erreur lors de la validation de la clé api"));
-            }
+        sql.query(requeteUtilisateur, [cleApi])
+            .then(resultatUtilisateur => {
+                if (resultatUtilisateur.rows.length === 0) {
+                    return reject(new Error("Clé API invalide ou utilisateur non trouvé"));
+                }
 
-            const utilisateurId = resultatUtilisateur[0].id;
+                const utilisateurId = resultatUtilisateur.rows[0].id;
 
-            let requeteTaches = `
-                SELECT id, utilisateur_id, titre, description, date_debut, date_echeance, complete FROM taches WHERE utilisateur_id = ?`;
+                let requeteTaches = `
+                    SELECT id, utilisateur_id, titre, description, date_debut, date_echeance, complete
+                    FROM taches
+                    WHERE utilisateur_id = $1`;
 
-            if (!afficherToutes) {
-                requeteTaches += ' AND complete = 0';
-            }
+                if (!afficherToutes) {
+                    requeteTaches += ' AND complete = false';
+                }
 
-            sql.query(requeteTaches, [utilisateurId], (erreur, resultat) => {
-                if (erreur) return reject(erreur);
-                resolve(resultat);
-            });
-        });
+                return sql.query(requeteTaches, [utilisateurId]);
+            })
+            .then(resultatTaches => {
+                resolve(resultatTaches.rows);
+            })
+            .catch(err => reject(err));
     });
 }
-
-
-
 
 function afficherDetails(){
 

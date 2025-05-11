@@ -3,8 +3,8 @@ import crypto from "crypto";
 import {afficherToutesTaches, afficherDetails, crudTaches, crudSousTaches, ajouterUtilisateurs, obtenirCleApi, mettreAJourCleApi} from "../models/tache.model.js";
 
 const AfficherTachesUsager = (req, res) => {
-    const cleApi = req.headers['authorization']; // Ou bien récupère la clé API d'une autre manière, selon comment tu la passes (par exemple dans les paramètres URL, req.query, etc.).
-    const afficherToutes = req.query.toutes === 'true'; // Vérifie s'il faut tout afficher
+    const cleApi = req.headers['authorization'];
+    const afficherToutes = req.query.toutes === 'true';
 
     if (!cleApi) {
         return res.status(400).json({ message: "La clé API est requise" });
