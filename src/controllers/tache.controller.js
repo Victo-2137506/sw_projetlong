@@ -57,40 +57,37 @@ const AjouterUtilisateur = (req, res) => {
 
 const Demandercle = async (req, res) => {
     const { courriel, motdepasse, regenerer } = req.body;
- 
+
     if (!courriel || !motdepasse) {
         return res.status(400).json({ message: "Courriel et mot de passe requis" });
     }
- 
+
     try {
-        // 1. Récupérer l'utilisateur et le mot de passe haché
-        const utilisateur = await tachemodel.obtenirCleApi(courriel);
- 
+        const utilisateur = await obtenirCleApi(courriel);
+
         if (!utilisateur) {
             return res.status(404).json({ message: "Utilisateur non trouvé" });
         }
- 
-        // 2. Vérifier le mot de passe
+
         const motDePasseValide = await bcrypt.compare(motdepasse, utilisateur.password);
         if (!motDePasseValide) {
             return res.status(401).json({ message: "Mot de passe invalide" });
         }
- 
-        // 3. Générer une nouvelle clé API si demandé
+
         if (regenerer === true) {
             const nouvelleCle = crypto.randomBytes(15).toString("hex");
-            await utilisateurModel.mettreAJourCleApi(utilisateur.id, nouvelleCle);
+            await mettreAJourCleApi(utilisateur.id, nouvelleCle);
             return res.status(200).json({ message: "Nouvelle clé générée", cle_api: nouvelleCle });
         }
- 
-        // 4. Retourner la clé existante
+
         return res.status(200).json({ cle_api: utilisateur.cle_api });
- 
+
     } catch (erreur) {
         console.error("Erreur dans demanderCle :", erreur);
         return res.status(500).json({ message: "Erreur interne lors de la demande de clé" });
     }
 };
+
 
 
 export{AfficherTachesUsager, AjouterUtilisateur, Demandercle}
