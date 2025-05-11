@@ -64,7 +64,7 @@ const Demandercle = async (req, res) => {
  
     try {
         // 1. Récupérer l'utilisateur et le mot de passe haché
-        const utilisateur = await utilisateurModel.obtenirCleApi(courriel);
+        const utilisateur = await tachemodel.obtenirCleApi(courriel);
  
         if (!utilisateur) {
             return res.status(404).json({ message: "Utilisateur non trouvé" });
