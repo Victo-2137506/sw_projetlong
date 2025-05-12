@@ -12,7 +12,7 @@ router.get('/tache', authentification, AfficherTachesUsager);
 router.get('/taches/:id', authentification, AfficherTacheDetails);
 
 // Route pour ajouter, modifier, changer le status et supprimer une tâche
-router.get('/:id', authentification, creerTache);          
+router.get('/', authentification, creerTache);          
 router.put('/:id', authentification, modifierUneTache);              
 router.patch('/:id/statut', authentification, changerStatut);        
 router.delete('/:id', authentification, supprimerUneTache);    
