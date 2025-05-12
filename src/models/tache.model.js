@@ -27,7 +27,7 @@ function genererCleAPI() {
 
 function afficherToutesTaches(utilisateurId, toutes) {
     return new Promise((resolve, reject) => {
-        let pg = "SELECT titre FROM taches WHERE utilisateur_id = $1";
+        let pg = "SELECT id, titre FROM taches WHERE utilisateur_id = $1";
 
         if(!toutes){
             pg += " AND complete = false";

@@ -23,9 +23,9 @@ router.put('/:id', authentification, modifierUneTache);              // Modifier
 router.patch('/:id/statut', authentification, changerStatut);        // Changer le statut d’une tâche
 router.delete('/:id', authentification, supprimerUneTache);          // Supprimer une tâche
 
-router.post('/:tacheId', authentification, creerSousTache);               // Ajouter une sous-tâche liée à une tâche
-router.put('/:id', authentification, modifierUneSousTache);               // Modifier une sous-tâche
-router.patch('/:id/statut', authentification,changerStatutSous);         // Modifier le statut d’une sous-tâche
-router.delete('/:id', authentification, supprimerUneSousTache);     
+router.post('/:tacheId/sous-taches', authentification, creerSousTache);
+router.put('/sous-taches/:id', authentification, modifierUneSousTache);
+router.patch('/sous-taches/:id/statut', authentification, changerStatutSous);
+router.delete('/sous-taches/:id', authentification, supprimerUneSousTache);    
 
 export default router;
