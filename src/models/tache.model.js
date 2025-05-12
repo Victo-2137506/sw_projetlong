@@ -28,7 +28,7 @@ function genererCleAPI() {
 
 function afficherToutesTaches(utilisateurId, toutes) {
     return new Promise((resolve, reject) => {
-        let pg = "SELECT * FROM taches WHERE utilisateur_id = $1";
+        let pg = "SELECT titre FROM taches WHERE utilisateur_id = $1";
 
         if(!toutes){
             pg += " AND complete = false";
@@ -43,9 +43,44 @@ function afficherToutesTaches(utilisateurId, toutes) {
     });
 }
 
-function afficherDetails(){
+function afficherDetails(tacheId) {
+    return new Promise((resolve, reject) => {
+        const requeteTache = `
+            SELECT id, titre, description, complete, date_debut, date_echeance 
+            FROM taches 
+            WHERE id = $1
+        `;
 
-};
+        sql.query(requeteTache, [tacheId], (err, resultTache) => {
+            if (err) {
+                return reject(err);
+            }
+
+            if (resultTache.rows.length === 0) {
+                return resolve(null); // tâche non trouvée
+            }
+
+            const tache = resultTache.rows[0];
+
+            const requeteSousTaches = `
+                SELECT id, titre, complete 
+                FROM sous_taches 
+                WHERE tache_id = $1
+            `;
+
+            sql.query(requeteSousTaches, [tacheId], (err, resultSousTaches) => {
+                if (err) {
+                    return reject(err);
+                }
+
+                // On ajoute les sous-tâches à l'objet tâche
+                tache.sous_taches = resultSousTaches.rows;
+                resolve(tache);
+            });
+        });
+    });
+}
+
 
 function crudTaches(){
 

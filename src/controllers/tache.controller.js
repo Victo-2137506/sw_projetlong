@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import crypto from "crypto";
-import {afficherToutesTaches, ajouterUtilisateurs, obtenirCleApi, mettreAJourCleApi} from "../models/tache.model.js";
+import {afficherToutesTaches, afficherDetails, ajouterUtilisateurs, obtenirCleApi, mettreAJourCleApi} from "../models/tache.model.js";
 
 const AfficherTachesUsager = (req, res) => {
     const utilisateurId = req.utilisateurId;
@@ -17,6 +17,26 @@ const AfficherTachesUsager = (req, res) => {
             res.status(500).json({ message: "Erreur serveur", erreur: error.message });
         });
 };
+
+function AfficherTacheDetails(req, res) {
+    const tacheId = parseInt(req.params.id, 10);
+
+    if (isNaN(tacheId)) {
+        return res.status(400).json({ erreur: "ID de tâche invalide." });
+    }
+
+    afficherDetails(tacheId)
+        .then(tache => {
+            if (!tache) {
+                return res.status(404).json({ erreur: "Tâche non trouvée." });
+            }
+            res.json(tache);
+        })
+        .catch(err => {
+            console.error("Erreur dans getTacheDetails :", err);
+            res.status(500).json({ erreur: "Erreur interne du serveur." });
+        });
+}
 
 
 const AjouterUtilisateur = (req, res) => {
@@ -88,4 +108,4 @@ const Demandercle = async (req, res) => {
 
 
 
-export{AfficherTachesUsager, AjouterUtilisateur, Demandercle}
+export{AfficherTachesUsager, AfficherTacheDetails, AjouterUtilisateur, Demandercle}
