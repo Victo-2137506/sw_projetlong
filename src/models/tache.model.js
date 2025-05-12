@@ -6,6 +6,7 @@ function ValidationCle(cleApi) {
     return new Promise((resolve, reject) => {
         const sql = "SELECT id FROM utilisateurs WHERE cle_api = $1";
         db.query(sql, [cleApi], (err, results) => {
+            console.log("err: ", err);
             if (err) {
                 console.error("Erreur lors de la validation de la clé API :", err);
                 return reject(err);
