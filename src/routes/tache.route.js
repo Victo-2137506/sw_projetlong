@@ -2,7 +2,7 @@ import express from 'express';
 const router = express.Router();
 
 import { AfficherTachesUsager, AjouterUtilisateur, Demandercle, AfficherTacheDetails,
-        creerTache, modifierUneTache, changerStatut, supprimerUneTache, listerTaches, detailsTache,
+        creerTache, modifierUneTache, changerStatut, supprimerUneTache,
     creerSousTache, modifierUneSousTache, changerStatutSous, supprimerUneSousTache
  } from '../controllers/tache.controller.js'
 import authentification from '../middlewares/authentification.middleware.js';
