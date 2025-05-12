@@ -1,4 +1,4 @@
-import ValidationCle from "../models/tache.model.js";
+import {ValidationCle} from "../models/tache.model.js";
 
 const authentification = (req, res, next) => {
 
