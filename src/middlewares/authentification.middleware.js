@@ -10,6 +10,7 @@ const authentification = (req, res, next) => {
     // Récupérer la clé API qui est dans l'entête au format "cle_api XXXXXXXX"
     const cleApi = req.headers.authorization.split(' ')[1];
     // Vérifier si la clé API est valide
+    console.log(cleApi);
     ValidationCle(cleApi)
     .then(resultat => {
         if(!resultat) {
