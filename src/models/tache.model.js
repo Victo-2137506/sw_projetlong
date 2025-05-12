@@ -31,7 +31,7 @@ function afficherToutesTaches(utilisateurId, toutes) {
         let pg = "SELECT * FROM taches WHERE utilisateur_id = $1";
 
         if(!toutes){
-            pg += " AND complete = 0";
+            pg += " AND complete = false";
         }
 
         sql.query(pg, [utilisateurId], (err, results) => {

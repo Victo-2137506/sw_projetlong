@@ -5,7 +5,7 @@ import {afficherToutesTaches, ajouterUtilisateurs, obtenirCleApi, mettreAJourCle
 const AfficherTachesUsager = (req, res) => {
     const utilisateurId = req.utilisateurId;
     const afficherToutes = req.query.toutes == "true";
-
+    
     afficherToutesTaches(utilisateurId, afficherToutes)
         .then((taches) => {
             if (!taches || taches.length === 0) {
