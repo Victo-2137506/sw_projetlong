@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import crypto from "crypto";
-import {afficherToutesTaches, afficherDetails, ajouterUtilisateurs, obtenirCleApi, mettreAJourCleApi} from "../models/tache.model.js";
+import {afficherToutesTaches, afficherDetails, ajouterUtilisateurs, ajouterTache, modifierTache, changerStatutTache, supprimerTache, 
+    ajouterSousTache, modifierSousTache, changerStatutSousTache, supprimerSousTache, obtenirCleApi, mettreAJourCleApi} from "../models/tache.model.js";
 
 const AfficherTachesUsager = (req, res) => {
     const utilisateurId = req.utilisateurId;
@@ -38,6 +39,123 @@ function AfficherTacheDetails(req, res) {
         });
 }
 
+async function creerTache(req, res) {
+    const utilisateurId = req.utilisateurId;
+    const { titre, description, date_debut, date_echeance } = req.body;
+
+    try {
+        const result = await ajouterTache(utilisateurId, titre, description, date_debut, date_echeance);
+        res.status(201).json({ message: 'Tâche ajoutée', id: result.rows[0].id });
+    } catch (err) {
+        res.status(500).json({ erreur: 'Erreur lors de l’ajout de la tâche' });
+    }
+}
+
+async function modifierUneTache(req, res) {
+    const tacheId = req.params.id;
+    const { titre, description, date_debut, date_echeance } = req.body;
+
+    try {
+        await modifierTache(tacheId, titre, description, date_debut, date_echeance);
+        res.status(200).json({ message: 'Tâche modifiée' });
+    } catch (err) {
+        res.status(500).json({ erreur: 'Erreur lors de la modification de la tâche' });
+    }
+}
+
+async function changerStatut(req, res) {
+    const tacheId = req.params.id;
+    const { complete } = req.body;
+
+    try {
+        await changerStatutTache(tacheId, complete);
+        res.status(200).json({ message: 'Statut modifié' });
+    } catch (err) {
+        res.status(500).json({ erreur: 'Erreur lors du changement de statut' });
+    }
+}
+
+async function supprimerUneTache(req, res) {
+    const tacheId = req.params.id;
+
+    try {
+        await supprimerTache(tacheId);
+        res.status(200).json({ message: 'Tâche supprimée' });
+    } catch (err) {
+        res.status(500).json({ erreur: 'Erreur lors de la suppression de la tâche' });
+    }
+}
+
+async function listerTaches(req, res) {
+    const utilisateurId = req.utilisateurId;
+    const toutes = req.query.toutes === "true";
+
+    try {
+        const taches = await afficherToutesTaches(utilisateurId, toutes);
+        res.json(taches);
+    } catch (err) {
+        res.status(500).json({ erreur: 'Erreur lors de la récupération des tâches' });
+    }
+}
+
+async function detailsTache(req, res) {
+    const tacheId = req.params.id;
+
+    try {
+        const tache = await afficherDetails(tacheId);
+        if (!tache) return res.status(404).json({ erreur: 'Tâche introuvable' });
+        res.json(tache);
+    } catch (err) {
+        res.status(500).json({ erreur: 'Erreur lors de la récupération de la tâche' });
+    }
+}
+
+async function creerSousTache(req, res) {
+    const tacheId = req.params.tacheId;
+    const { titre } = req.body;
+
+    try {
+        const result = await ajouterSousTache(tacheId, titre);
+        res.status(201).json({ message: 'Sous-tâche ajoutée', id: result.rows[0].id });
+    } catch (err) {
+        res.status(500).json({ erreur: 'Erreur lors de l’ajout de la sous-tâche' });
+    }
+}
+
+async function modifierUneSousTache(req, res) {
+    const sousTacheId = req.params.id;
+    const { titre } = req.body;
+
+    try {
+        await modifierSousTache(sousTacheId, titre);
+        res.status(200).json({ message: 'Sous-tâche modifiée' });
+    } catch (err) {
+        res.status(500).json({ erreur: 'Erreur lors de la modification' });
+    }
+}
+
+async function changerStatutSous(req, res) {
+    const sousTacheId = req.params.id;
+    const { complete } = req.body;
+
+    try {
+        await changerStatutSousTache(sousTacheId, complete);
+        res.status(200).json({ message: 'Statut modifié' });
+    } catch (err) {
+        res.status(500).json({ erreur: 'Erreur lors du changement de statut' });
+    }
+}
+
+async function supprimerUneSousTache(req, res) {
+    const sousTacheId = req.params.id;
+
+    try {
+        await supprimerSousTache(sousTacheId);
+        res.status(200).json({ message: 'Sous-tâche supprimée' });
+    } catch (err) {
+        res.status(500).json({ erreur: 'Erreur lors de la suppression' });
+    }
+}
 
 const AjouterUtilisateur = (req, res) => {
     const { nom, prenom, courriel, password } = req.body;
@@ -108,4 +226,7 @@ const Demandercle = async (req, res) => {
 
 
 
-export{AfficherTachesUsager, AfficherTacheDetails, AjouterUtilisateur, Demandercle}
+export{AfficherTachesUsager, AfficherTacheDetails, AjouterUtilisateur, Demandercle,
+        creerTache, modifierUneTache, changerStatut, supprimerUneTache, listerTaches, detailsTache,
+            creerSousTache, modifierUneSousTache, changerStatutSous, supprimerUneSousTache
+}

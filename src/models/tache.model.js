@@ -6,7 +6,6 @@ function ValidationCle(cleApi) {
     return new Promise((resolve, reject) => {
         const pg = "SELECT id FROM utilisateurs WHERE cle_api = $1";
         sql.query(pg, [cleApi], (err, results) => {
-            console.log("err: ", err);
             if (err) {
                 console.error("Erreur lors de la validation de la clé API :", err);
                 return reject(err);
@@ -45,11 +44,7 @@ function afficherToutesTaches(utilisateurId, toutes) {
 
 function afficherDetails(tacheId) {
     return new Promise((resolve, reject) => {
-        const requeteTache = `
-            SELECT id, titre, description, complete, date_debut, date_echeance 
-            FROM taches 
-            WHERE id = $1
-        `;
+        const requeteTache = `SELECT id, titre, description, complete, date_debut, date_echeance FROM taches WHERE id = $1`;
 
         sql.query(requeteTache, [tacheId], (err, resultTache) => {
             if (err) {
@@ -57,23 +52,16 @@ function afficherDetails(tacheId) {
             }
 
             if (resultTache.rows.length === 0) {
-                return resolve(null); // tâche non trouvée
+                return resolve(null);
             }
 
             const tache = resultTache.rows[0];
-
-            const requeteSousTaches = `
-                SELECT id, titre, complete 
-                FROM sous_taches 
-                WHERE tache_id = $1
-            `;
+            const requeteSousTaches = `SELECT id, titre, complete FROM sous_taches WHERE tache_id = $1`;
 
             sql.query(requeteSousTaches, [tacheId], (err, resultSousTaches) => {
                 if (err) {
                     return reject(err);
                 }
-
-                // On ajoute les sous-tâches à l'objet tâche
                 tache.sous_taches = resultSousTaches.rows;
                 resolve(tache);
             });
@@ -81,14 +69,56 @@ function afficherDetails(tacheId) {
     });
 }
 
+function ajouterTache(utilisateurId, titre, description, date_debut, date_echeance) {
+    const query = `
+        INSERT INTO taches (utilisateur_id, titre, description, date_debut, date_echeance, complete)
+        VALUES ($1, $2, $3, $4, $5, false) RETURNING id
+    `;
+    const values = [utilisateurId, titre, description, date_debut, date_echeance];
+    return sql.query(query, values);
+}
 
-function crudTaches(){
+function modifierTache(tacheId, titre, description, date_debut, date_echeance) {
+    const query = `
+        UPDATE taches SET titre = $1, description = $2, date_debut = $3, date_echeance = $4
+        WHERE id = $5
+    `;
+    const values = [titre, description, date_debut, date_echeance, tacheId];
+    return sql.query(query, values);
+}
 
-};
+function changerStatutTache(tacheId, nouveauStatut) {
+    const query = `UPDATE taches SET complete = $1 WHERE id = $2`;
+    return sql.query(query, [nouveauStatut, tacheId]);
+}
 
-function crudSousTaches(){
+function supprimerTache(tacheId) {
+    const query = `DELETE FROM taches WHERE id = $1`;
+    return sql.query(query, [tacheId]);
+}
 
-};
+function ajouterSousTache(tacheId, titre) {
+    const query = `
+        INSERT INTO sous_taches (tache_id, titre, complete) VALUES ($1, $2, false) RETURNING id
+    `;
+    return sql.query(query, [tacheId, titre]);
+}
+
+function modifierSousTache(sousTacheId, titre) {
+    const query = `UPDATE sous_taches SET titre = $1 WHERE id = $2`;
+    return sql.query(query, [titre, sousTacheId]);
+}
+
+function changerStatutSousTache(sousTacheId, nouveauStatut) {
+    const query = `UPDATE sous_taches SET complete = $1 WHERE id = $2`;
+    return sql.query(query, [nouveauStatut, sousTacheId]);
+}
+
+function supprimerSousTache(sousTacheId) {
+    const query = `DELETE FROM sous_taches WHERE id = $1`;
+    return sql.query(query, [sousTacheId]);
+}
+
 
 function ajouterUtilisateurs(nom, prenom, courriel, password) {
     return new Promise((resolve, reject) => {
@@ -132,4 +162,4 @@ async function mettreAJourCleApi(utilisateurId, nouvelleCle) {
     await sql.query(requete, [nouvelleCle, utilisateurId]);
 }
 
-export {ValidationCle, afficherToutesTaches, afficherDetails, crudTaches, crudSousTaches, ajouterUtilisateurs, obtenirCleApi, mettreAJourCleApi};
+export {ValidationCle, afficherToutesTaches, afficherDetails, ajouterTache, modifierTache, changerStatutTache, supprimerTache, ajouterSousTache, modifierSousTache, changerStatutSousTache, supprimerSousTache, ajouterUtilisateurs, obtenirCleApi, mettreAJourCleApi};
