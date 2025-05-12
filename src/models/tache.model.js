@@ -11,11 +11,11 @@ function ValidationCle(cleApi) {
                 console.error("Erreur lors de la validation de la clé API :", err);
                 return reject(err);
             }
- 
-            if (results.length === 0) {
+
+            if (results.rows.length === 0) { // <-- correction ici
                 return resolve(null); // Clé invalide
             }
-            console.log(results);
+
             return resolve(results.rows[0].id); // Clé valide : retourne l'ID
         });
     });
