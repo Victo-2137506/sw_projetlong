@@ -16,7 +16,7 @@ function ValidationCle(cleApi) {
                 return resolve(null); // Clé invalide
             }
             console.log(results);
-            return resolve(results.rows.id); // Clé valide : retourne l'ID
+            return resolve(results.rows[0].id); // Clé valide : retourne l'ID
         });
     });
 };
@@ -38,7 +38,7 @@ function afficherToutesTaches(utilisateurId, toutes) {
             if(err){
                 return reject(err)
             }
-            resolve(results);
+            resolve(results.rows);
         })
     });
 }
