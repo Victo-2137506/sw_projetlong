@@ -98,17 +98,6 @@ async function listerTaches(req, res) {
     }
 }
 
-async function detailsTache(req, res) {
-    const tacheId = req.params.id;
-
-    try {
-        const tache = await afficherDetails(tacheId);
-        if (!tache) return res.status(404).json({ erreur: 'Tâche introuvable' });
-        res.json(tache);
-    } catch (err) {
-        res.status(500).json({ erreur: 'Erreur lors de la récupération de la tâche' });
-    }
-}
 
 async function creerSousTache(req, res) {
     const tacheId = req.params.tacheId;
@@ -227,6 +216,6 @@ const Demandercle = async (req, res) => {
 
 
 export{AfficherTachesUsager, AfficherTacheDetails, AjouterUtilisateur, Demandercle,
-        creerTache, modifierUneTache, changerStatut, supprimerUneTache, listerTaches, detailsTache,
+        creerTache, modifierUneTache, changerStatut, supprimerUneTache, listerTaches,
             creerSousTache, modifierUneSousTache, changerStatutSous, supprimerUneSousTache
 }
