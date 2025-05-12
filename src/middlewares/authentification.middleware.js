@@ -1,4 +1,4 @@
-import tacheModels from "../models/tache.model.js";
+import ValidationCle from "../models/tache.model.js";
 
 const authentification = (req, res, next) => {
 
@@ -10,7 +10,7 @@ const authentification = (req, res, next) => {
     // Récupérer la clé API qui est dans l'entête au format "cle_api XXXXXXXX"
     const cleApi = req.headers.authorization.split(' ')[1];
     // Vérifier si la clé API est valide
-    tacheModels.ValidationCle(cleApi)
+    ValidationCle(cleApi)
     .then(resultat => {
         if(!resultat) {
             return res.status(401).json({ message: "Clé API invalide" });
