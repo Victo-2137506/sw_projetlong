@@ -86,19 +86,6 @@ async function supprimerUneTache(req, res) {
     }
 }
 
-async function listerTaches(req, res) {
-    const utilisateurId = req.utilisateurId;
-    const toutes = req.query.toutes === "true";
-
-    try {
-        const taches = await afficherToutesTaches(utilisateurId, toutes);
-        res.json(taches);
-    } catch (err) {
-        res.status(500).json({ erreur: 'Erreur lors de la récupération des tâches' });
-    }
-}
-
-
 async function creerSousTache(req, res) {
     const tacheId = req.params.tacheId;
     const { titre } = req.body;
@@ -216,6 +203,7 @@ const Demandercle = async (req, res) => {
 
 
 export{AfficherTachesUsager, AfficherTacheDetails, AjouterUtilisateur, Demandercle,
-        creerTache, modifierUneTache, changerStatut, supprimerUneTache, listerTaches,
-            creerSousTache, modifierUneSousTache, changerStatutSous, supprimerUneSousTache
+        creerTache, modifierUneTache, changerStatut, supprimerUneTache,
+            creerSousTache,modifierUneSousTache, changerStatutSous, supprimerUneSousTache
+
 }
