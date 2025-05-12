@@ -14,12 +14,12 @@ function ValidationCle(cleApi) {
             if (results.length === 0) {
                 return resolve(null); // Clé invalide
             }
- 
+            console.log(results);
             return resolve(results[0].id); // Clé valide : retourne l'ID
         });
     });
 };
- 
+
 // Code fait par ChatGPT pour generer une clé d'api
 function genererCleAPI() {
     const cle = crypto.randomBytes(15).toString("hex");
