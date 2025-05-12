@@ -4,8 +4,8 @@ import bcrypt from 'bcrypt';
 
 function ValidationCle(cleApi) {
     return new Promise((resolve, reject) => {
-        const sql = "SELECT id FROM utilisateurs WHERE cle_api = $1";
-        sql.query(sql, [cleApi], (err, results) => {
+        const pg = "SELECT id FROM utilisateurs WHERE cle_api = $1";
+        sql.query(pg, [cleApi], (err, results) => {
             console.log("err: ", err);
             if (err) {
                 console.error("Erreur lors de la validation de la clé API :", err);
