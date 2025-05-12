@@ -16,7 +16,7 @@ function ValidationCle(cleApi) {
                 return resolve(null); // Clé invalide
             }
             console.log(results);
-            return resolve(results[0].id); // Clé valide : retourne l'ID
+            return resolve(results.rows[0].id); // Clé valide : retourne l'ID
         });
     });
 };
