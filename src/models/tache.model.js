@@ -162,4 +162,5 @@ async function mettreAJourCleApi(utilisateurId, nouvelleCle) {
     await sql.query(requete, [nouvelleCle, utilisateurId]);
 }
 
-export {ValidationCle, afficherToutesTaches, afficherDetails, ajouterTache, modifierTache, changerStatutTache, supprimerTache, ajouterSousTache, modifierSousTache, changerStatutSousTache, supprimerSousTache, ajouterUtilisateurs, obtenirCleApi, mettreAJourCleApi};
+export {ValidationCle, afficherToutesTaches, afficherDetails, ajouterTache, modifierTache, changerStatutTache, supprimerTache, 
+    ajouterSousTache, modifierSousTache, changerStatutSousTache, supprimerSousTache, ajouterUtilisateurs, obtenirCleApi, mettreAJourCleApi};
