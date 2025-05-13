@@ -1,3 +1,4 @@
+//Ce script.js est inspiré du code de l'examen 2.
 document.getElementById("btn-creer").addEventListener("click", async () => {
     const prenom = document.getElementById("prenom").value.trim();
     const nom = document.getElementById("nom").value.trim();

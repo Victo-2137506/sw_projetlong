@@ -4,6 +4,13 @@ import tacheRoutes from './src/routes/tache.route.js';
 import fs from 'fs';
 import path from 'path';
 import cors from 'cors';
+import swaggerUI from 'swagger-ui-express';
+
+const swaggerDocument = JSON.parse(fs.readFileSync('./src/config/documentation.json', 'utf8'));
+const swaggerOptions = {
+    customCss: '.swagger-ui .topbar {display : none}',
+    customSiteTitle : "Documentation API"
+};
 
 // Créer une application express
 const app = express();
@@ -12,17 +19,12 @@ app.use(cors())
 
 // Importer les middlewares
 app.use(express.json());
-app.use(morgan('dev'));
+var logMorgan = fs.createWriteStream(path.join('src', 'log', 'access.log'), { flags: 'a' });
+app.use(morgan('dev',{stream : logMorgan}));
 
 // Route
 app.use('/api/taches', tacheRoutes);
-
-// Logger les erreurs 500
-const logMorgan = fs.createWriteStream(path.join('src', 'log', 'access.log'), { flags: 'a' });
-app.use(morgan('combined', {
-  skip: (req, res) => res.statusCode < 500,
-  stream: logMorgan
-}));
+app.use('/api/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument, swaggerOptions));
 
 // Démarrer le serveur
 const PORT = process.env.PORT || 3000;

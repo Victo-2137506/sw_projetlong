@@ -21,6 +21,7 @@
     "express": "^5.1.0",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
-    "postgre": "^0.1.8"
+    "postgre": "^0.1.8",
+    "swagger-ui-express": "^5.0.1"
   }
 }
