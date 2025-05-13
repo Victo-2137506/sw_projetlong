@@ -1,8 +1,8 @@
 import express from 'express';
 import morgan from 'morgan';
-import sql from './src/config/db_pg.js';
 import tacheRoutes from './src/routes/tache.route.js';
-import authentification from './src/middlewares/authentification.middleware.js';
+import fs from 'fs';
+import path from 'path';
 
 // Créer une application express
 const app = express();
@@ -11,14 +11,15 @@ const app = express();
 app.use(express.json());
 app.use(morgan('dev'));
 
-// Middleware Morgan
-app.use((err, req, res, next) => {
-  console.error(`Erreur 500 - ${req.method} ${req.originalUrl}`);
-  console.error(err.stack);
-  res.status(500).json({ message: "Une erreur est survenue sur le serveur." });
-});
- 
+// Route
 app.use('/api/taches', tacheRoutes);
+
+// Logger les erreurs 500
+const logMorgan = fs.createWriteStream(path.join('src', 'log', 'access.log'), { flags: 'a' });
+app.use(morgan('combined', {
+  skip: (req, res) => res.statusCode < 500,
+  stream: logMorgan
+}));
 
 // Démarrer le serveur
 const PORT = process.env.PORT || 3000;
