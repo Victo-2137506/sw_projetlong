@@ -23,7 +23,7 @@ function ValidationCle(cleApi) {
 
 // Code fait par ChatGPT pour generer une clé d'api
 function genererCleAPI() {
-    const cle = crypto.randomBytes(15).toString("hex");
+    return cle = crypto.randomBytes(15).toString("hex");
 }
 
 function afficherToutesTaches(utilisateurId, toutes) {
@@ -125,8 +125,7 @@ function ajouterUtilisateurs(nom, prenom, courriel, password) {
     return new Promise((resolve, reject) => {
         const cle_api = genererCleAPI();
 
-        // Hasher le mot de passe avant insertion
-        bcrypt.hash(password, 10) // 10 est le "salt rounds", un bon compromis sécurité/performance
+        bcrypt.hash(password, 10)
             .then(hashedPassword => {
                 const requete = `INSERT INTO utilisateurs (nom, prenom, courriel, password, cle_api) VALUES ($1, $2, $3, $4, $5) RETURNING id`;
                 const params = [nom, prenom, courriel, hashedPassword, cle_api];
