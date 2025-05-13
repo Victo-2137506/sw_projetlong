@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import tacheRoutes from './src/routes/tache.route.js';
 import fs from 'fs';
 import path from 'path';
+import cors from 'cors';
 
 // Créer une application express
 const app = express();
@@ -10,6 +11,7 @@ const app = express();
 // Importer les middlewares
 app.use(express.json());
 app.use(morgan('dev'));
+app.use(cors())
 
 // Route
 app.use('/api/taches', tacheRoutes);

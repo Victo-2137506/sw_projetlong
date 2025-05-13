@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Épreuve finale - Services Web H25</title>
     <link rel='stylesheet' href="./css/styles.css">
-    <script src="/application/js/script.js"></script>
+    <script defer src="./js/script.js"></script>
 </head>
 <body>
     <h1>Épreuve finale - Services Web H25</h1>
@@ -14,29 +14,27 @@
         <!-- Formulaire de création -->
         <div class="form-section">
             <h3>Création d'un utilisateur</h3>
-                <form id="form-creer-utilisateur">
-                    <input name="prenom" placeholder="Votre prénom">
-                    <input name="nom" placeholder="Votre nom">
-                    <input name="courriel" placeholder="Votre courriel">
-                    <input type="password" name="motdepasse" placeholder="********">
-                    <button type="cree">Créer</button>
-                    <div id="message-creer"></div>
-                </form>
+            <form>
+                <input name="prenom" id="prenom" placeholder="Votre prénom">
+                <input name="nom" id="nom" placeholder="Votre nom">
+                <input name="courriel" id="courriel" placeholder="Votre courriel">
+                <input type="password" id="motdepasse" placeholder="********">
+                <button type="button" id="btn-creer">Créer</button>
+                <div id="message-creer"></div>
+            </form>
         </div>
 
         <!-- Formulaire de récupération -->
         <div class="form-section">
             <h3>Récupération d'une clé api</h3>
-                <form id="form-cle-api">
-                    <input name="courriel_recup" placeholder="Votre courriel">
-                    <input type="password" name="motdepasse_recup" placeholder="********">
-                    <div class="checkbox-container">
-                        <input type="checkbox" name="generer">
-                        <label for="generer">Générer une nouvelle clé</label>
-                    </div>
-                    <button type="recuperer">Récupérer</button>
-                    <div id="message-cle"></div>
-                </form>
+            <form>
+                <input name="courriel_recup" id="courriel_recup" placeholder="Votre courriel">
+                <input type="password" id="motdepasse_recup" placeholder="********">
+                <input type="checkbox" id="generer">
+                <label for="generer">Générer une nouvelle clé</label>
+                <button type="button" id="btn-cle">Récupérer</button>
+                <div id="message-cle"></div>
+            </form>
         </div>
     </div>
 </body>
