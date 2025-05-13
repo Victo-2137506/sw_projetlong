@@ -49,14 +49,14 @@ document.getElementById("btn-cle").addEventListener("click", async () => {
         return;
     }
 
-    const option = {
+    const options = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ courriel, motdepasse, regenerer })
     };
 
     try {
-        const response = await fetch("https://sw-projetlong-y7ru.onrender.com/api/taches/cle-api", option);
+        const response = await fetch("https://sw-projetlong-y7ru.onrender.com/api/taches/cle-api", options);
         const data = await response.json();
 
         if (response.ok) {

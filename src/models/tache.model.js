@@ -1,6 +1,7 @@
 import sql from '../config/db_pg.js';
 import authentification from '../middlewares/authentification.middleware.js';
 import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 
 function ValidationCle(cleApi) {
     return new Promise((resolve, reject) => {
