@@ -8,10 +8,11 @@ import cors from 'cors';
 // Créer une application express
 const app = express();
 
+app.use(cors())
+
 // Importer les middlewares
 app.use(express.json());
 app.use(morgan('dev'));
-app.use(cors())
 
 // Route
 app.use('/api/taches', tacheRoutes);
