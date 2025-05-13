@@ -23,7 +23,7 @@ function ValidationCle(cleApi) {
 
 // Code fait par ChatGPT pour generer une clé d'api
 function genererCleAPI() {
-    return cle = crypto.randomBytes(15).toString("hex");
+    const cle = crypto.randomBytes(15).toString("hex");
 }
 
 function afficherToutesTaches(utilisateurId, toutes) {
