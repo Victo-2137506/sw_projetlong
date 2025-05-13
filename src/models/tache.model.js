@@ -21,11 +21,6 @@ function ValidationCle(cleApi) {
     });
 };
 
-// Code fait par ChatGPT pour generer une clé d'api
-function genererCleAPI() {
-    return cle = crypto.randomBytes(15).toString("hex");
-}
-
 function afficherToutesTaches(utilisateurId, toutes) {
     return new Promise((resolve, reject) => {
         let pg = "SELECT id, titre FROM taches WHERE utilisateur_id = $1";
@@ -123,7 +118,7 @@ function supprimerSousTache(sousTacheId) {
 
 function ajouterUtilisateurs(nom, prenom, courriel, password) {
     return new Promise((resolve, reject) => {
-        const cle_api = genererCleAPI();
+            const cle_api = crypto.randomBytes(15).toString("hex");
 
         bcrypt.hash(password, 10)
             .then(hashedPassword => {
