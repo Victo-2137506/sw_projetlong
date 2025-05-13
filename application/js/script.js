@@ -1,74 +1,55 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Formulaire de création d'utilisateur
     const formCreer = document.getElementById("form-creer-utilisateur");
-    const msgCreer = document.getElementById("message-creer");
+    const formCle = document.getElementById("form-cle-api");
 
     formCreer.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const data = {
-            prenom: formCreer.prenom.value,
-            nom: formCreer.nom.value,
-            courriel: formCreer.courriel.value,
-            password: formCreer.motdepasse.value
-        };
+        const prenom = formCreer.querySelector("input[name='prenom']").value;
+        const nom = formCreer.querySelector("input[name='nom']").value;
+        const courriel = formCreer.querySelector("input[name='courriel']").value;
+        const password = formCreer.querySelector("input[name='motdepasse']").value;
 
-        try {
-            const response = await fetch("/api/taches/utilisateur", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data)
-            });
+        const response = await fetch("https://sw-projetlong-y7ru.onrender.com/api/taches/utilisateur", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nom, prenom, courriel, password })
+        });
 
-            const result = await response.json();
+        const data = await response.json();
+        const message = document.getElementById("message-creer");
 
-            if (response.ok) {
-                msgCreer.innerText = result.message;
-                msgCreer.style.color = "green";
-                formCreer.reset();
-            } else {
-                msgCreer.innerText = result.erreur || "Erreur lors de la création";
-                msgCreer.style.color = "red";
-            }
-        } catch (err) {
-            msgCreer.innerText = "Erreur réseau ou serveur";
-            msgCreer.style.color = "red";
+        if (response.ok) {
+            message.style.color = "green";
+            message.textContent = `Utilisateur créé avec succès. Clé API : ${data.utilisateur.cle_api}`;
+        } else {
+            message.style.color = "red";
+            message.textContent = `Erreur: ${data.erreur || data.message}`;
         }
     });
-
-    // Formulaire de récupération de clé API
-    const formCle = document.getElementById("form-cle-api");
-    const msgCle = document.getElementById("message-cle");
 
     formCle.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const data = {
-            courriel: formCle.courriel_recup.value,
-            motdepasse: formCle.motdepasse_recup.value,
-            regenerer: formCle.generer.checked
-        };
+        const courriel = formCle.querySelector("input[name='courriel_recup']").value;
+        const motdepasse = formCle.querySelector("input[name='motdepasse_recup']").value;
+        const regenerer = formCle.querySelector("input[name='generer']").checked;
 
-        try {
-            const response = await fetch("/api/taches/cle-api", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data)
-            });
+        const response = await fetch("https://sw-projetlong-y7ru.onrender.com/api/taches/cle-api", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ courriel, motdepasse, regenerer })
+        });
 
-            const result = await response.json();
+        const data = await response.json();
+        const message = document.getElementById("message-cle");
 
-            if (response.ok) {
-                msgCle.innerText = `Clé API : ${result.cle_api}`;
-                msgCle.style.color = "green";
-                formCle.reset();
-            } else {
-                msgCle.innerText = result.message || "Erreur lors de la récupération";
-                msgCle.style.color = "red";
-            }
-        } catch (err) {
-            msgCle.innerText = "Erreur réseau ou serveur";
-            msgCle.style.color = "red";
+        if (response.ok) {
+            message.style.color = "green";
+            message.textContent = `Clé API : ${data.cle_api}`;
+        } else {
+            message.style.color = "red";
+            message.textContent = `Erreur: ${data.message}`;
         }
     });
 });
