@@ -8,8 +8,16 @@ import authentification from './src/middlewares/authentification.middleware.js';
 const app = express();
 
 // Importer les middlewares
-app.use(express.json()); // Correction ici : retirer les guillemets autour de express.json()
+app.use(express.json());
+app.use(morgan('dev'));
 
+// Middleware Morgan
+app.use((err, req, res, next) => {
+  console.error(`Erreur 500 - ${req.method} ${req.originalUrl}`);
+  console.error(err.stack);
+  res.status(500).json({ message: "Une erreur est survenue sur le serveur." });
+});
+ 
 app.use('/api/taches', tacheRoutes);
 
 // Démarrer le serveur
