@@ -1,0 +1,241 @@
+{
+    "openapi": "3.1.0",
+    "info":{
+        "title": "Démo API",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000/",
+            "description": "Serveur de développement"
+        },
+        {
+            "url": "http://api.profs.ca",
+            "description": "Serveur en ligne"
+        }
+    ],
+    "paths": {
+        "/api": {
+            "get": {
+                "summary": "Message de bienvenue",
+                "tags": ["Accueil"],
+                "responses": {
+                    "200": {
+                        "description": "Retourne un message de bienvenue",
+                        "content": {
+                            "text/html": {
+                                "example": "<h1>Mon premier serveur web sur express !</h1>"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/salutations": {
+            "get": {
+                "summary": "Récupérer une salutation aléatoire",
+                "tags": ["Salutations"],
+                "description": "Récupérer une salutation aléatoire en fonction de la langue d'un code de langue",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "langue",
+                        "description": "Code souhaité de langue de la salutation. Seulement les codes présent par défaut sont énumérés, d'autres peuvent être présents.",
+                        "schema": {
+                            "type": "string",
+                            "enum": [ "fr", "en", "es", "de" ]
+                        },
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Salutation aléatoire récupérée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code_langue": {
+                                            "type": "string",
+                                            "example": "fr"
+                                        },
+                                        "langue": {
+                                            "type": "string",
+                                            "example": "Français"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bonjour le monde"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404" : {
+                        "description": "Code de langue non trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Erreur, le code de langue [fr] n'existe pas"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Ajouter une salutation",
+                "tags": ["Salutations"],
+                "description": "Ajouter une salutation en fournissant un code de langue, la langue et un message",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "code_langue": {
+                                        "type": "string",
+                                        "example": "fr"
+                                    },
+                                    "langue": {
+                                        "type": "string",
+                                        "example": "Français"
+                                    },
+                                    "message": {
+                                        "type": "string",
+                                        "example": "La nouvelle salutation"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Salutation ajoutée avec succésses",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Salutation ajoutée"
+                                        },
+                                        "salutation": {
+                                            "type": "string",
+                                            "example": "La nouvelle salutation"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erreur de paramètres manquants",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Erreur, les paramètres code_langue, langue et message sont obligatoires"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500" : {
+                        "description": "Erreur serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Echec lors de l'ajout de la salutation."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/salutations/{id}": {
+            "get": {
+                "summary": "Récupérer une salutation",
+                "tags": ["Salutations"],
+                "description": "Récupérer une salutation en fonction de son id",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "Id de la salutation",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "exemple" : "1"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Salutation retrouvée avec succes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code_langue": {
+                                            "type": "string",
+                                            "example": "fr"
+                                        },
+                                        "langue": {
+                                            "type": "string",
+                                            "example": "Français"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bonjour le monde"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404" : {
+                        "description": "Salutation non rencontrée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Erreur, la salutation [id] n'existe pas"
+                                        }
+                                    }
+                                }   
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
