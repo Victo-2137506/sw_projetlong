@@ -19,7 +19,7 @@ document.getElementById("btn-creer").addEventListener("click", async () => {
     };
 
     try {
-        const response = await fetch("/api/taches/utilisateur", options);
+        const response = await fetch("https://sw-projetlong-y7ru.onrender.com/api/taches/utilisateur", options);
         const data = await response.json();
 
         if (response.ok) {
@@ -49,14 +49,14 @@ document.getElementById("btn-cle").addEventListener("click", async () => {
         return;
     }
 
-    const options = {
+    const option = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ courriel, motdepasse, regenerer })
     };
 
     try {
-        const response = await fetch("/api/taches/cle-api", options);
+        const response = await fetch("https://sw-projetlong-y7ru.onrender.com/api/taches/cle-api", option);
         const data = await response.json();
 
         if (response.ok) {

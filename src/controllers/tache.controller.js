@@ -160,6 +160,7 @@ const AjouterUtilisateur = (req, res) => {
             });
         })
         .catch((error) => {
+            console.log(error)
             res.status(500).json({
                 erreur: `Échec lors de la création de l'utilisateur ${nom}`,
                 message: error.message
