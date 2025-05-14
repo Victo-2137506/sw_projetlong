@@ -538,7 +538,7 @@
     },
     "/api/taches/cle-api": {
       "post": {
-        "summary": "Obtenir ou régénérer une clé API",
+        "summary": "Obtenir une clé API",
         "tags": ["Utilisateurs"],
         "requestBody": {
           "required": true,
@@ -547,14 +547,14 @@
               "example": {
                 "courriel": "nathan.drake@gmail.com",
                 "motdepasse": "qwerty123",
-                "regenerer": true
+                "regenerer": false
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Clé API générée ou récupérée avec succès",
+            "description": "Clé API récupérée avec succès",
             "content": {
               "application/json": {
                 "example": {
@@ -574,11 +574,62 @@
             }
           },
           "500": {
-            "description": "Erreur lors de la génération de la clé API",
+            "description": "Erreur lors de la récupérée de la clé API",
             "content": {
               "application/json": {
                 "example": {
-                  "erreur": "Erreur lors de la génération de la clé API"
+                  "erreur": "Erreur lors de la récupérée de la clé API"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/taches/cle-api": {
+      "post": {
+        "summary": "Régénérer une clé API",
+        "tags": ["Utilisateurs"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "courriel": "nathan.drake@gmail.com",
+                "motdepasse": "qwerty123",
+                "regenerer": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Clé API générée avec succès",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message" : "Nouvelle clé générée",
+                  "cle_api": "d7e6513ca71af3dbca54b3e851306b"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identifiants invalides",
+            "content": {
+              "application/json": {
+                "example": {
+                  "erreur": "Identifiants invalides"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erreur lors de la regéneration de la clé API",
+            "content": {
+              "application/json": {
+                "example": {
+                  "erreur": "Erreur lors de la regéneration de la clé API"
                 }
               }
             }
