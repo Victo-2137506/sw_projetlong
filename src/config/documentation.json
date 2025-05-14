@@ -9,7 +9,7 @@
     "/api/taches/tache": {
       "get": {
         "summary": "Afficher les tâches de l'utilisateur",
-        "tags": ["Tâches"],
+        "tags": ["Afficher tâches"],
         "parameters": [
           {
             "name": "toutes",
@@ -66,7 +66,7 @@
     "/api/taches/taches/{id}": {
       "get": {
         "summary": "Afficher les détails d'une tâche",
-        "tags": ["Tâches"],
+        "tags": ["Afficher tâches"],
         "parameters": [
           {
             "name": "id",
@@ -131,7 +131,7 @@
     "/api/taches": {
       "post": {
         "summary": "Créer une nouvelle tâche",
-        "tags": ["Tâches"],
+        "tags": ["CRUD tâches"],
         "requestBody": {
           "required": true,
           "content": {
@@ -173,7 +173,7 @@
     "/api/taches/{id}": {
       "put": {
         "summary": "Modifier une tâche existante",
-        "tags": ["Tâches"],
+        "tags": ["CRUD tâches"],
         "parameters": [
           {
             "name": "id",
@@ -222,7 +222,7 @@
       },
       "delete": {
         "summary": "Supprimer une tâche",
-        "tags": ["Tâches"],
+        "tags": ["CRUD tâches"],
         "parameters": [
           {
             "name": "id",
@@ -260,7 +260,188 @@
     "/api/taches/{id}/statut": {
       "patch": {
         "summary": "Modifier le statut de complétion d’une tâche",
-        "tags": ["Tâches"],
+        "tags": ["CRUD tâches"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "complete": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Statut modifié",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Statut modifié"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erreur lors du changement de statut",
+            "content": {
+              "application/json": {
+                "example": {
+                  "erreur": "Erreur lors du changement de statut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/taches/{tacheId}/sous-taches": {
+      "post": {
+        "summary": "Créer une sous-tâche pour une tâche",
+        "tags": ["Sous-tâches"],
+        "parameters": [
+          {
+            "name": "tacheId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "titre": "Un autre test"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Sous-tâche ajoutée avec succès",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Sous-tâche ajoutée",
+                  "id": 4
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erreur lors de l’ajout de la sous-tâche",
+            "content": {
+              "application/json": {
+                "example": {
+                  "erreur": "Erreur lors de l’ajout de la sous-tâche"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/taches/sous-taches/{id}": {
+      "put": {
+        "summary": "Modifier une sous-tâche",
+        "tags": ["Sous-tâches"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "titre": "Test fonction et ceci fonctionne"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sous-tâche modifiée",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Sous-tâche modifiée"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erreur lors de la modification",
+            "content": {
+              "application/json": {
+                "example": {
+                  "erreur": "Erreur lors de la modification"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Supprimer une sous-tâche",
+        "tags": ["Sous-tâches"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sous-tâche supprimée",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Sous-tâche supprimée"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erreur lors de la suppression",
+            "content": {
+              "application/json": {
+                "example": {
+                  "erreur": "Erreur lors de la suppression"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/taches/sous-taches/{id}/statut": {
+      "patch": {
+        "summary": "Changer le statut d’une sous-tâche",
+        "tags": ["Sous-tâches"],
         "parameters": [
           {
             "name": "id",
