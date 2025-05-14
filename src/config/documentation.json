@@ -544,7 +544,7 @@
         "tags": ["Utilisateurs"],
         "parameters":[
             {
-                "description": "Changer la valeur (`complete`), si la tâche est complète (`true`) ou si la tâches est incomplètes (`false`)."
+                "description": "Changer la valeur (`regenerer`), si vous voulez générer une nouvelle clé api (`true`) ou si vous voulez récupérer votre clé api(`false`)."
             }
         ],
         "requestBody": {
