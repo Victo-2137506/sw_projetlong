@@ -1,241 +1,132 @@
 {
-    "openapi": "3.1.0",
-    "info":{
-        "title": "Démo API",
-        "version": "1.0.0"
-    },
-    "servers": [
-        {
-            "url": "http://localhost:3000/",
-            "description": "Serveur de développement"
-        },
-        {
-            "url": "https://sw-projetlong-y7ru.onrender.com",
-            "description": "Serveur en ligne"
-        }
-    ],
-    "paths": {
-        "/api/taches/tache?toutes=false": {
-            "get": {
-                "summary": "Afficher les tâches imcomplètes",
-                "tags": ["Tâches"],
-                "responses": {
-                    "200": {
-                        "description": "Retourne les tâches incomplètes de l'utilsateur.",
-                        "content": {
-                            "text/html": {
-                                "example": "{id : 1, titre : Faire marcher ma fonction}"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/salutations": {
-            "get": {
-                "summary": "Récupérer une salutation aléatoire",
-                "tags": ["Salutations"],
-                "description": "Récupérer une salutation aléatoire en fonction de la langue d'un code de langue",
-                "parameters": [
-                    {
-                        "in": "query",
-                        "name": "langue",
-                        "description": "Code souhaité de langue de la salutation. Seulement les codes présent par défaut sont énumérés, d'autres peuvent être présents.",
-                        "schema": {
-                            "type": "string",
-                            "enum": [ "fr", "en", "es", "de" ]
-                        },
-                        "required": false
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Salutation aléatoire récupérée avec succès",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "code_langue": {
-                                            "type": "string",
-                                            "example": "fr"
-                                        },
-                                        "langue": {
-                                            "type": "string",
-                                            "example": "Français"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Bonjour le monde"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "404" : {
-                        "description": "Code de langue non trouvé",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Erreur, le code de langue [fr] n'existe pas"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API de gestion des tâches",
+    "version": "1.0.0",
+    "description": "Cette API permet de gérer les tâches des utilisateurs, incluant la consultation des tâches et des détails d'une tâche spécifique."
+  },
+  "paths": {
+    "/api/taches/tache": {
+      "get": {
+        "summary": "Afficher les tâches de l'utilisateur",
+        "tags": ["Tâches"],
+        "parameters": [
+          {
+            "name": "toutes",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
             },
-            "post": {
-                "summary": "Ajouter une salutation",
-                "tags": ["Salutations"],
-                "description": "Ajouter une salutation en fournissant un code de langue, la langue et un message",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "code_langue": {
-                                        "type": "string",
-                                        "example": "fr"
-                                    },
-                                    "langue": {
-                                        "type": "string",
-                                        "example": "Français"
-                                    },
-                                    "message": {
-                                        "type": "string",
-                                        "example": "La nouvelle salutation"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Salutation ajoutée avec succésses",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Salutation ajoutée"
-                                        },
-                                        "salutation": {
-                                            "type": "string",
-                                            "example": "La nouvelle salutation"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Erreur de paramètres manquants",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Erreur, les paramètres code_langue, langue et message sont obligatoires"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "500" : {
-                        "description": "Erreur serveur",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Echec lors de l'ajout de la salutation."
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+            "description": "Indique s'il faut afficher toutes les tâches (`true`) ou seulement les tâches incomplètes (`false`)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retourne les tâches filtrées selon le paramètre 'toutes'.",
+            "content": {
+              "application/json": {
+                "example": [
+                  {
+                    "id": 1,
+                    "titre": "Faire marcher ma fonction"
+                  },
+                  {
+                    "id": 4,
+                    "titre": "Test fonction"
+                  }
+                ]
+              }
             }
-        },
-        "/api/salutations/{id}": {
-            "get": {
-                "summary": "Récupérer une salutation",
-                "tags": ["Salutations"],
-                "description": "Récupérer une salutation en fonction de son id",
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "id",
-                        "description": "Id de la salutation",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int32",
-                            "exemple" : "1"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Salutation retrouvée avec succes",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "code_langue": {
-                                            "type": "string",
-                                            "example": "fr"
-                                        },
-                                        "langue": {
-                                            "type": "string",
-                                            "example": "Français"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Bonjour le monde"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "404" : {
-                        "description": "Salutation non rencontrée",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Erreur, la salutation [id] n'existe pas"
-                                        }
-                                    }
-                                }   
-                            }
-                        }
-                    }
+          },
+          "404": {
+            "description": "Aucune tâche trouvée pour cet utilisateur.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Aucune tâche trouvée pour cette clé API"
                 }
+              }
             }
+          },
+          "500": {
+            "description": "Erreur serveur.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Erreur serveur",
+                  "erreur": "Détails de l'erreur"
+                }
+              }
+            }
+          }
         }
+      }
+    },
+    "/api/taches/taches/{id}": {
+      "get": {
+        "summary": "Afficher les détails d'une tâche",
+        "tags": ["Tâches"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "L'identifiant de la tâche."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retourne les détails complets de la tâche.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 4,
+                  "titre": "Test fonction",
+                  "description": "ceci est un test",
+                  "complete": false,
+                  "date_debut": "2025-05-12T00:00:00.000Z",
+                  "date_echeance": "2025-05-15T00:00:00.000Z",
+                  "sous_taches": []
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ID de tâche invalide.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "erreur": "ID de tâche invalide."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Tâche non trouvée.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "erreur": "Tâche non trouvée."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erreur interne du serveur.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "erreur": "Erreur interne du serveur."
+                }
+              }
+            }
+          }
+        }
+      }
     }
+  }
 }
