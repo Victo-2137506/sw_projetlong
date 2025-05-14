@@ -10,21 +10,21 @@
             "description": "Serveur de développement"
         },
         {
-            "url": "http://api.profs.ca",
+            "url": "https://sw-projetlong-y7ru.onrender.com",
             "description": "Serveur en ligne"
         }
     ],
     "paths": {
-        "/api": {
+        "/api/taches/tache?toutes=false": {
             "get": {
-                "summary": "Message de bienvenue",
-                "tags": ["Accueil"],
+                "summary": "Afficher les tâches imcomplètes",
+                "tags": ["Tâches"],
                 "responses": {
                     "200": {
-                        "description": "Retourne un message de bienvenue",
+                        "description": "Retourne les tâches incomplètes de l'utilsateur.",
                         "content": {
                             "text/html": {
-                                "example": "<h1>Mon premier serveur web sur express !</h1>"
+                                "example": "{id : 1, titre : Faire marcher ma fonction}"
                             }
                         }
                     }
