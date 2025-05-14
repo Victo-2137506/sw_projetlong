@@ -1,127 +1,174 @@
 {
-  "openapi": "3.0.0",
-  "info": {
-    "title": "API de gestion des tâches",
-    "version": "1.0.0",
-    "description": "Cette API permet de gérer les tâches des utilisateurs, incluant la consultation des tâches et des détails d'une tâche spécifique."
-  },
-  "paths": {
-    "/api/taches/tache": {
-      "get": {
-        "summary": "Afficher les tâches de l'utilisateur",
-        "tags": ["Tâches"],
-        "parameters": [
-          {
-            "name": "toutes",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "boolean"
-            },
-            "description": "Indique s'il faut afficher toutes les tâches (`true`) ou seulement les tâches incomplètes (`false`)."
+  "/api/taches": {
+    "post": {
+      "summary": "Créer une nouvelle tâche",
+      "tags": ["Tâches"],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "example": {
+              "titre": "Test fonction",
+              "description": "ceci est un test",
+              "date_debut": "2025-05-12",
+              "date_echeance": "2025-05-15"
+            }
           }
-        ],
-        "responses": {
-          "200": {
-            "description": "Retourne les tâches filtrées selon le paramètre 'toutes'.",
-            "content": {
-              "application/json": {
-                "example": [
-                  {
-                    "id": 1,
-                    "titre": "Faire marcher ma fonction"
-                  },
-                  {
-                    "id": 4,
-                    "titre": "Test fonction"
-                  }
-                ]
+        }
+      },
+      "responses": {
+        "201": {
+          "description": "Tâche créée avec succès",
+          "content": {
+            "application/json": {
+              "example": {
+                "message": "Tâche ajoutée",
+                "id": 7
               }
             }
-          },
-          "404": {
-            "description": "Aucune tâche trouvée pour cet utilisateur.",
-            "content": {
-              "application/json": {
-                "example": {
-                  "message": "Aucune tâche trouvée pour cette clé API"
-                }
+          }
+        },
+        "500": {
+          "description": "Erreur lors de l’ajout de la tâche",
+          "content": {
+            "application/json": {
+              "example": {
+                "erreur": "Erreur lors de l’ajout de la tâche"
               }
             }
-          },
-          "500": {
-            "description": "Erreur serveur.",
-            "content": {
-              "application/json": {
-                "example": {
-                  "message": "Erreur serveur",
-                  "erreur": "Détails de l'erreur"
-                }
+          }
+        }
+      }
+    }
+  },
+  "/api/taches/{id}": {
+    "put": {
+      "summary": "Modifier une tâche existante",
+      "tags": ["Tâches"],
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "example": {
+              "titre": "Test fonction",
+              "description": "ceci est un test et la modification fonctionne",
+              "date_debut": "2025-05-12",
+              "date_echeance": "2025-05-15"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Tâche modifiée",
+          "content": {
+            "application/json": {
+              "example": {
+                "message": "Tâche modifiée"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Erreur lors de la modification de la tâche",
+          "content": {
+            "application/json": {
+              "example": {
+                "erreur": "Erreur lors de la modification de la tâche"
               }
             }
           }
         }
       }
     },
-    "/api/taches/taches/{id}": {
-      "get": {
-        "summary": "Afficher les détails d'une tâche",
-        "tags": ["Tâches"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            },
-            "description": "L'identifiant de la tâche."
+    "delete": {
+      "summary": "Supprimer une tâche",
+      "tags": ["Tâches"],
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
           }
-        ],
-        "responses": {
-          "200": {
-            "description": "Retourne les détails complets de la tâche.",
-            "content": {
-              "application/json": {
-                "example": {
-                  "id": 4,
-                  "titre": "Test fonction",
-                  "description": "ceci est un test",
-                  "complete": false,
-                  "date_debut": "2025-05-12T00:00:00.000Z",
-                  "date_echeance": "2025-05-15T00:00:00.000Z",
-                  "sous_taches": []
-                }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Tâche supprimée",
+          "content": {
+            "application/json": {
+              "example": {
+                "message": "Tâche supprimée"
               }
             }
-          },
-          "400": {
-            "description": "ID de tâche invalide.",
-            "content": {
-              "application/json": {
-                "example": {
-                  "erreur": "ID de tâche invalide."
-                }
+          }
+        },
+        "500": {
+          "description": "Erreur lors de la suppression de la tâche",
+          "content": {
+            "application/json": {
+              "example": {
+                "erreur": "Erreur lors de la suppression de la tâche"
               }
             }
-          },
-          "404": {
-            "description": "Tâche non trouvée.",
-            "content": {
-              "application/json": {
-                "example": {
-                  "erreur": "Tâche non trouvée."
-                }
+          }
+        }
+      }
+    }
+  },
+  "/api/taches/{id}/statut": {
+    "patch": {
+      "summary": "Modifier le statut de complétion d’une tâche",
+      "tags": ["Tâches"],
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "example": {
+              "complete": true
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Statut modifié",
+          "content": {
+            "application/json": {
+              "example": {
+                "message": "Statut modifié"
               }
             }
-          },
-          "500": {
-            "description": "Erreur interne du serveur.",
-            "content": {
-              "application/json": {
-                "example": {
-                  "erreur": "Erreur interne du serveur."
-                }
+          }
+        },
+        "500": {
+          "description": "Erreur lors du changement de statut",
+          "content": {
+            "application/json": {
+              "example": {
+                "erreur": "Erreur lors du changement de statut"
               }
             }
           }
