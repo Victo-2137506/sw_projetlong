@@ -308,7 +308,7 @@
     "/api/taches/{tacheId}/sous-taches": {
       "post": {
         "summary": "Créer une sous-tâche pour une tâche",
-        "tags": ["Sous-tâches"],
+        "tags": ["CRUD sous-tâches"],
         "parameters": [
           {
             "name": "tacheId",
@@ -357,7 +357,7 @@
     "/api/taches/sous-taches/{id}": {
       "put": {
         "summary": "Modifier une sous-tâche",
-        "tags": ["Sous-tâches"],
+        "tags": ["CRUD sous-tâches"],
         "parameters": [
           {
             "name": "id",
@@ -403,7 +403,7 @@
       },
       "delete": {
         "summary": "Supprimer une sous-tâche",
-        "tags": ["Sous-tâches"],
+        "tags": ["CRUD sous-tâches"],
         "parameters": [
           {
             "name": "id",
@@ -441,7 +441,7 @@
     "/api/taches/sous-taches/{id}/statut": {
       "patch": {
         "summary": "Changer le statut d’une sous-tâche",
-        "tags": ["Sous-tâches"],
+        "tags": ["CRUD sous-tâches"],
         "parameters": [
           {
             "name": "id",
@@ -479,6 +479,106 @@
               "application/json": {
                 "example": {
                   "erreur": "Erreur lors du changement de statut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/taches/utilisateur": {
+      "post": {
+        "summary": "Créer un nouvel utilisateur",
+        "tags": ["Utilisateurs"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "nom": "Nathan",
+                "prenom": "Drake",
+                "courriel": "nathan.drake@gmail.com",
+                "password": "qwerty123"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Utilisateur ajouté avec succès",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "L'utilisateur Nathan a été ajouté avec succès",
+                  "utilisateur": {
+                    "id": 6,
+                    "nom": "Nathan",
+                    "prenom": "Drake",
+                    "courriel": "nathan.drake@gmail.com",
+                    "password": "****",
+                    "cle_api": "d7e6513ca71af3dbca54b3e851306b"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erreur lors de la création de l'utilisateur",
+            "content": {
+              "application/json": {
+                "example": {
+                  "erreur": "Échec lors de la création de l'utilisateur Nathan",
+                  "message": "Détail de l’erreur"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/taches/cle-api": {
+      "post": {
+        "summary": "Obtenir ou régénérer une clé API",
+        "tags": ["Utilisateurs"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "courriel": "nathan.drake@gmail.com",
+                "motdepasse": "qwerty123",
+                "regenerer": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Clé API générée ou récupérée avec succès",
+            "content": {
+              "application/json": {
+                "example": {
+                  "cle_api": "d7e6513ca71af3dbca54b3e851306b"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identifiants invalides",
+            "content": {
+              "application/json": {
+                "example": {
+                  "erreur": "Identifiants invalides"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erreur lors de la génération de la clé API",
+            "content": {
+              "application/json": {
+                "example": {
+                  "erreur": "Erreur lors de la génération de la clé API"
                 }
               }
             }
