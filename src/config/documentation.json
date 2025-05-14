@@ -23,7 +23,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Retourne les tâches filtrées selon le paramètre 'toutes'.",
+            "description": "Retourne les tâches filtrées selon le paramètre (`toutes`).",
             "content": {
               "application/json": {
                 "example": [

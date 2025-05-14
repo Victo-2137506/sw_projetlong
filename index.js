@@ -9,25 +9,25 @@ import swaggerUI from 'swagger-ui-express';
 const swaggerDocument = JSON.parse(fs.readFileSync('./src/config/documentation.json', 'utf8'));
 const swaggerOptions = {
     customCss: '.swagger-ui .topbar {display : none}',
-    customSiteTitle : "Documentation API"
+    customSiteTitle: "Documentation API"
 };
 
-// Créer une application express
+// Créer une application Express
 const app = express();
 
-app.use(cors())
+app.use(cors());
 
 // Importer les middlewares
 app.use(express.json());
 var logMorgan = fs.createWriteStream(path.join('src', 'log', 'access.log'), { flags: 'a' });
-app.use(morgan('dev',{stream : logMorgan}));
+app.use(morgan('dev', { stream: logMorgan }));
 
-// Route
+// Routes
 app.use('/api/taches', tacheRoutes);
 app.use('/api/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument, swaggerOptions));
 
 // Démarrer le serveur
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Serveur démarré sur le serveur http://localhost:${PORT}`);
+    console.log(`Serveur démarré sur le port http://localhost:${PORT}`);
 });

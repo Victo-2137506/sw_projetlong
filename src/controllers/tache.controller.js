@@ -136,22 +136,18 @@ async function supprimerUneSousTache(req, res) {
 const AjouterUtilisateur = (req, res) => {
     const { nom, prenom, courriel, password } = req.body;
 
-    // Vérification des champs manquants
     let champsManquants = [];
     if (!nom) champsManquants.push("nom");
     if (!prenom) champsManquants.push("prenom");
     if (!courriel) champsManquants.push("courriel");
     if (!password) champsManquants.push("password");
 
-    // Si des champs sont manquants, retourner une erreur
     if (champsManquants.length > 0) {
         return res.status(400).json({
             erreur: "Le format des données est invalide",
             champ_manquant: champsManquants
         });
     }
-
-    // Appel de la fonction ajouterUtilisateurs pour insérer l'utilisateur
     ajouterUtilisateurs(nom, prenom, courriel, password)
         .then((nouvelUtilisateur) => {
             res.status(201).json({
@@ -201,10 +197,8 @@ const Demandercle = async (req, res) => {
     }
 };
 
-
-
-export{AfficherTachesUsager, AfficherTacheDetails, AjouterUtilisateur, Demandercle,
-        creerTache, modifierUneTache, changerStatut, supprimerUneTache,
-            creerSousTache,modifierUneSousTache, changerStatutSous, supprimerUneSousTache
-
-}
+export {
+    AfficherTachesUsager, AfficherTacheDetails, AjouterUtilisateur, Demandercle,
+    creerTache, modifierUneTache, changerStatut, supprimerUneTache,
+    creerSousTache, modifierUneSousTache, changerStatutSous, supprimerUneSousTache
+};

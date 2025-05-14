@@ -1,5 +1,4 @@
 import sql from '../config/db_pg.js';
-import authentification from '../middlewares/authentification.middleware.js';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 
@@ -12,11 +11,11 @@ function ValidationCle(cleApi) {
                 return reject(err);
             }
 
-            if (results.rows.length === 0) { // <-- correction ici
-                return resolve(null); // Clé invalide
+            if (results.rows.length === 0) { 
+                return resolve(null);
             }
 
-            return resolve(results.rows[0].id); // Clé valide : retourne l'ID
+            return resolve(results.rows[0].id);
         });
     });
 };
